@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="description" content="Robion — aplikacja dla fachowców i zlecających. Faktury, zlecenia, marketplace, poradnik. Zaprojektowane w Polsce, dla polskich realiów.">
+<title>Robion — Faktury dla fachowców. Po polsku, po prostu.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@300;400;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0a0a0a;
+  --bg-alt:#111;
+  --bg-card:#161616;
+  --accent:#F5A623;
+  --accent2:#e8940a;
+  --accent-dim:rgba(245,166,35,0.12);
+  --accent-border:rgba(245,166,35,0.25);
+  --text:rgba(255,255,255,0.95);
+  --text2:rgba(255,255,255,0.6);
+  --text3:rgba(255,255,255,0.35);
+  --border:rgba(255,255,255,0.08);
+  --border-strong:rgba(255,255,255,0.14);
+  --glass:rgba(255,255,255,0.04);
+  --glass-strong:rgba(255,255,255,0.08);
+  --green:#34D399;
+  --blue:#60A5FA;
+  --purple:#A78BFA;
+  --pink:#F472B6;
+  --font:'Barlow',sans-serif;
+  --font-c:'Barlow Condensed',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+
+html{scroll-behavior:smooth}
+
+body {
+  font-family:var(--font);
+  background:var(--bg);
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,0.012) 3px, rgba(255,255,255,0.012) 4px),
+    repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(255,255,255,0.012) 3px, rgba(255,255,255,0.012) 4px),
+    repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(255,255,255,0.006) 8px, rgba(255,255,255,0.006) 9px);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+  position:relative;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ─── ATMOSPHERE / GLOW BLOBS ─── */
+.atmosphere{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.glow{position:absolute;border-radius:50%;filter:blur(120px);opacity:0.08;will-change:transform}
+.glow-1{width:600px;height:600px;background:#F5A623;top:-200px;right:-150px;animation:drift1 25s ease-in-out infinite}
+.glow-2{width:500px;height:500px;background:#F5A623;top:50%;left:-200px;animation:drift2 30s ease-in-out infinite}
+.glow-3{width:400px;height:400px;background:#A78BFA;bottom:-100px;right:30%;opacity:0.05;animation:drift3 35s ease-in-out infinite}
+@keyframes drift1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-50px,50px) scale(1.15)}}
+@keyframes drift2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(60px,-30px) scale(1.1)}}
+@keyframes drift3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-40px,40px) scale(1.2)}}
+
+/* ─── NAV ─── */
+nav {
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:18px 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(10,10,10,0.7);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  border-bottom:1px solid var(--border);
+  transition:background 0.3s ease;
+}
+.nav-logo {
+  font-family:var(--font-c);
+  font-size:24px;font-weight:900;
+  letter-spacing:4px;text-transform:uppercase;
+  color:var(--text);
+  text-decoration:none;
+}
+.nav-logo span { color:var(--accent); }
+.nav-cta {
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 22px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#000;
+  font-family:var(--font-c);
+  font-size:13px;font-weight:800;
+  text-transform:uppercase;letter-spacing:1.5px;
+  text-decoration:none;
+  border-radius:10px;
+  transition:all 0.2s;
+  box-shadow:0 4px 16px rgba(245,166,35,0.3);
+}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(245,166,35,0.5)}
+.nav-cta-arrow{font-size:14px;transition:transform 0.2s}
+.nav-cta:hover .nav-cta-arrow{transform:translateX(3px)}
+
+/* ─── SHARED ─── */
+section {
+  position:relative;
+  z-index:1;
+  padding:120px 32px;
+  max-width:1280px;
+  margin:0 auto;
+}
+.section-tag {
+  display:inline-block;
+  font-family:var(--font-c);
+  font-size:11px;font-weight:800;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--accent);
+  padding:6px 14px;
+  border:1px solid var(--accent-border);
+  border-radius:4px;
+  background:var(--accent-dim);
+  margin-bottom:24px;
+}
+.section-tag.coming {
+  color:var(--text3);
+  border-color:var(--border-strong);
+  background:var(--glass);
+}
+.section-tag.coming::before {
+  content:'';
+  display:inline-block;
+  width:6px;height:6px;border-radius:50%;
+  background:var(--text3);
+  margin-right:8px;vertical-align:middle;
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:0.4}50%{opacity:1}}
+
+h2.section-title {
+  font-family:var(--font-c);
+  font-size:clamp(40px, 7vw, 88px);
+  font-weight:900;
+  line-height:0.95;
+  letter-spacing:-1px;
+  text-transform:uppercase;
+  margin-bottom:20px;
+}
+h2.section-title em {
+  font-style:normal;
+  color:var(--accent);
+}
+.section-lead {
+  font-size:clamp(16px, 1.6vw, 19px);
+  font-weight:400;
+  color:var(--text2);
+  max-width:680px;
+  line-height:1.6;
+}
+
+/* ─── HERO ─── */
+.hero {
+  min-height:100vh;
+  padding:140px 32px 60px;
+  display:grid;
+  grid-template-columns:1.1fr 0.9fr;
+  gap:60px;
+  align-items:center;
+  max-width:1280px;
+  margin:0 auto;
+  position:relative;
+  z-index:1;
+}
+.hero-content { animation:fadeUp 0.8s ease 0.2s both; }
+.hero h1 {
+  font-family:var(--font-c);
+  font-size:clamp(48px, 8.5vw, 120px);
+  font-weight:900;
+  line-height:0.92;
+  letter-spacing:-2px;
+  text-transform:uppercase;
+  margin-bottom:28px;
+}
+.hero h1 .accent { color:var(--accent); display:block; }
+.hero h1 .strike {
+  display:inline-block;
+  position:relative;
+}
+.hero h1 .strike::after {
+  content:'';position:absolute;
+  left:-2px;right:-2px;
+  bottom:18%;height:6px;
+  background:var(--accent);
+  transform:scaleX(0);transform-origin:left;
+  animation:strike 0.8s ease 1s forwards;
+}
+@keyframes strike{to{transform:scaleX(1)}}
+
+.hero-lead {
+  font-size:clamp(17px, 1.7vw, 21px);
+  color:var(--text2);
+  max-width:540px;
+  margin-bottom:36px;
+  line-height:1.55;
+}
+.hero-lead strong { color:var(--text); font-weight:600; }
+.hero-buttons{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.btn-primary {
+  display:inline-flex;align-items:center;gap:10px;
+  padding:18px 36px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#000;
+  font-family:var(--font-c);
+  font-size:16px;font-weight:800;
+  text-transform:uppercase;letter-spacing:1.5px;
+  text-decoration:none;
+  border-radius:14px;
+  transition:all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow:0 8px 32px rgba(245,166,35,0.35);
+}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 16px 48px rgba(245,166,35,0.55)}
+.btn-primary .arrow{font-size:18px;transition:transform 0.2s}
+.btn-primary:hover .arrow{transform:translateX(5px)}
+.btn-secondary {
+  display:inline-flex;align-items:center;gap:8px;
+  padding:18px 32px;
+  color:var(--text);
+  font-family:var(--font-c);
+  font-size:14px;font-weight:700;
+  text-transform:uppercase;letter-spacing:1.5px;
+  text-decoration:none;
+  border:1px solid var(--border-strong);
+  border-radius:14px;
+  background:var(--glass);
+  backdrop-filter:blur(10px);
+  transition:all 0.2s;
+}
+.btn-secondary:hover{border-color:var(--accent-border);background:var(--accent-dim);color:var(--accent)}
+
+.hero-meta {
+  display:flex;gap:32px;margin-top:48px;
+  padding-top:28px;
+  border-top:1px solid var(--border);
+}
+.meta-item{display:flex;flex-direction:column;gap:4px}
+.meta-value{
+  font-family:var(--font-c);
+  font-size:28px;font-weight:800;
+  color:var(--accent);
+  letter-spacing:0.5px;
+}
+.meta-label{
+  font-family:var(--font-c);
+  font-size:11px;font-weight:600;
+  text-transform:uppercase;letter-spacing:1.5px;
+  color:var(--text3);
+}
+
+/* ─── HERO MOCKUP — telefon ─── */
+.hero-mockup{position:relative;display:flex;justify-content:center;align-items:center;animation:fadeUp 0.9s ease 0.5s both}
+.phone {
+  width:340px;height:680px;
+  background:#000;
+  border-radius:48px;
+  border:8px solid #1a1a1a;
+  position:relative;
+  box-shadow:
+    0 40px 100px rgba(0,0,0,0.6),
+    0 0 0 1px rgba(245,166,35,0.1),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+  overflow:hidden;
+}
+.phone::before {
+  content:'';position:absolute;top:14px;left:50%;transform:translateX(-50%);
+  width:120px;height:30px;background:#0a0a0a;border-radius:14px;z-index:10;
+}
+.phone-screen{position:absolute;inset:0;border-radius:40px;overflow:hidden;display:flex;flex-direction:column}
+
+/* App header inside phone */
+.app-header{padding:60px 20px 14px;background:rgba(17,17,17,0.95);border-bottom:1px solid var(--border);position:relative}
+.app-header::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent) 40%,transparent);opacity:0.5}
+.app-logo{font-family:var(--font-c);font-size:24px;font-weight:900;letter-spacing:4px;color:var(--text)}
+.app-logo span{color:var(--accent)}
+.app-page-title{font-family:var(--font-c);font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-top:4px}
+
+/* Stats card */
+.app-content{flex:1;padding:14px;background:#0a0a0a;overflow:hidden;position:relative}
+.app-stats {
+  background:linear-gradient(135deg,rgba(245,166,35,0.12),rgba(245,166,35,0.04));
+  border:1px solid var(--accent-border);
+  border-radius:16px;
+  padding:18px;
+  margin-bottom:14px;
+  position:relative;overflow:hidden;
+}
+.app-stats::before{content:'';position:absolute;top:-30px;right:-30px;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(245,166,35,0.2),transparent 70%)}
+.stats-label{font-family:var(--font-c);font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px}
+.stats-value-wrap{position:relative;font-family:var(--font-c);font-size:32px;font-weight:900;color:var(--text);line-height:1;letter-spacing:-1px;display:flex;align-items:baseline;gap:6px}
+.stats-currency{font-size:18px;color:var(--accent)}
+.counter{display:inline-block;animation:countUp 2s ease-out 1.2s forwards;opacity:0}
+@keyframes countUp{to{opacity:1}}
+.stats-meta{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:11px;color:var(--text2)}
+.stats-meta strong{color:var(--accent);font-family:var(--font-c);font-weight:800;font-size:12px;letter-spacing:0.5px}
+.stats-trend{display:inline-flex;align-items:center;gap:3px;padding:2px 6px;background:rgba(52,211,153,0.12);border:1px solid rgba(52,211,153,0.3);border-radius:4px;color:#34D399;font-size:9px;font-weight:700;font-family:var(--font-c);letter-spacing:0.5px}
+
+/* Action tiles */
+.app-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
+.app-action{background:var(--glass);border:1px solid var(--border);border-radius:12px;padding:12px 10px;display:flex;flex-direction:column;gap:4px}
+.app-action.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;box-shadow:0 4px 16px rgba(245,166,35,0.3)}
+.app-action-icon{font-size:18px}
+.app-action-title{font-family:var(--font-c);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;color:var(--text)}
+.app-action.primary .app-action-title{color:#000}
+.app-action-sub{font-size:9px;color:var(--text3);line-height:1.2}
+.app-action.primary .app-action-sub{color:rgba(0,0,0,0.6)}
+
+/* Faktury list */
+.fv-section-title{font-family:var(--font-c);font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin:8px 0 6px}
+.fv-row{
+  background:var(--glass);border:1px solid var(--border);border-radius:10px;
+  padding:10px 12px;display:flex;align-items:center;gap:8px;margin-bottom:6px;
+  animation:fvSlideIn 0.6s ease both;
+}
+.fv-row:nth-child(1){animation-delay:1.5s}
+.fv-row:nth-child(2){animation-delay:1.7s}
+.fv-row:nth-child(3){animation-delay:1.9s}
+@keyframes fvSlideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+.fv-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 5px var(--accent);flex-shrink:0}
+.fv-info{flex:1;min-width:0}
+.fv-nr{font-family:var(--font-c);font-size:10px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:4px}
+.fv-badge{display:inline-block;color:#000;font-weight:800;font-size:7px;padding:1px 4px;border-radius:2px;letter-spacing:0.3px;font-family:var(--font-c)}
+.fv-klient{font-size:9px;color:var(--text3);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fv-kwota{text-align:right;flex-shrink:0}
+.fv-brutto{font-family:var(--font-c);font-size:11px;font-weight:800;color:var(--accent)}
+
+/* App nav inside phone */
+.app-nav{padding:6px 6px;background:rgba(10,10,10,0.95);border-top:1px solid var(--border);display:flex;justify-content:space-around}
+.app-nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px;border-radius:8px}
+.app-nav-item.active{background:var(--accent-dim);border:1px solid var(--accent-border)}
+.app-nav-icon{font-size:14px}
+.app-nav-label{font-family:var(--font-c);font-size:7px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;color:var(--text3)}
+.app-nav-item.active .app-nav-label{color:var(--accent)}
+
+/* Phone glow */
+.phone-glow{position:absolute;inset:-100px;background:radial-gradient(circle at center, rgba(245,166,35,0.15), transparent 60%);pointer-events:none;z-index:-1}
+
+/* ─── FEATURE GRID (Faktury) ─── */
+.features-section { padding-top:60px; }
+.features-grid {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:16px;
+  margin-top:48px;
+}
+.feature-card {
+  background:linear-gradient(180deg,var(--glass),rgba(255,255,255,0.02));
+  backdrop-filter:blur(20px);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:36px 32px;
+  position:relative;
+  overflow:hidden;
+  transition:all 0.3s ease;
+}
+.feature-card:hover{transform:translateY(-4px);border-color:var(--accent-border);box-shadow:0 20px 60px rgba(0,0,0,0.4)}
+.feature-card::before {
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+  opacity:0;transition:opacity 0.3s;
+}
+.feature-card:hover::before{opacity:0.5}
+.feature-icon {
+  width:56px;height:56px;
+  border-radius:16px;
+  background:var(--accent-dim);
+  border:1px solid var(--accent-border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;
+  margin-bottom:24px;
+}
+.feature-title {
+  font-family:var(--font-c);
+  font-size:24px;font-weight:800;
+  text-transform:uppercase;letter-spacing:1px;
+  color:var(--text);
+  margin-bottom:12px;
+}
+.feature-desc {
+  font-size:15px;color:var(--text2);
+  line-height:1.6;
+}
+
+/* ─── INTERACTIVE FAKTURA MOCKUP ─── */
+.faktura-demo {
+  margin-top:80px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:60px;
+  align-items:center;
+}
+.demo-text h3 {
+  font-family:var(--font-c);
+  font-size:clamp(28px, 4vw, 44px);
+  font-weight:900;
+  line-height:1;
+  text-transform:uppercase;
+  margin-bottom:20px;
+}
+.demo-text h3 em{font-style:normal;color:var(--accent)}
+.demo-text p{color:var(--text2);font-size:17px;line-height:1.7;margin-bottom:24px}
+.demo-steps{display:flex;flex-direction:column;gap:14px;margin-top:32px}
+.demo-step{display:flex;align-items:flex-start;gap:14px}
+.demo-step-num{
+  width:28px;height:28px;flex-shrink:0;
+  border-radius:8px;
+  background:var(--accent-dim);
+  border:1px solid var(--accent-border);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-c);font-weight:800;
+  color:var(--accent);font-size:13px;
+}
+.demo-step-text{flex:1;color:var(--text2);font-size:15px;line-height:1.5}
+.demo-step-text strong{color:var(--text);font-weight:600}
+
+/* Mockup paper preview */
+.paper-mockup{
+  position:relative;
+  background:#fff;color:#111;
+  border-radius:12px;
+  padding:0;
+  overflow:hidden;
+  box-shadow:0 30px 80px rgba(0,0,0,0.5),0 0 0 1px rgba(245,166,35,0.15);
+  font-family:var(--font);
+  transform:perspective(1000px) rotateY(-8deg) rotateX(4deg);
+  transition:transform 0.5s ease;
+}
+.paper-mockup:hover{transform:perspective(1000px) rotateY(-4deg) rotateX(2deg)}
+.paper-mockup::before{content:'';position:absolute;top:0;left:0;right:0;height:6px;background:var(--accent);z-index:2}
+.paper-inner{padding:32px 28px;font-size:11px;line-height:1.5}
+.paper-h1{font-family:var(--font-c);font-size:20px;font-weight:900;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;color:#111;text-align:center}
+.paper-nr{text-align:center;font-size:11px;color:#666;margin-bottom:20px}
+.paper-nr strong{color:#111;font-family:var(--font-c);font-weight:800;letter-spacing:0.5px}
+.paper-dates{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;background:#f8f8f8;padding:10px;border-radius:6px;margin-bottom:14px}
+.paper-date{text-align:center}
+.paper-date label{display:block;font-size:8px;text-transform:uppercase;color:#888;margin-bottom:2px;letter-spacing:0.5px;font-weight:700;font-family:var(--font-c)}
+.paper-date span{font-size:10px;color:#111;font-weight:600}
+.paper-strony{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.paper-strona label{display:block;font-size:8px;text-transform:uppercase;color:#888;letter-spacing:0.5px;font-weight:700;font-family:var(--font-c);margin-bottom:4px}
+.paper-strona-name{font-size:11px;font-weight:700;color:#111;margin-bottom:2px}
+.paper-strona-info{font-size:9px;color:#666;line-height:1.4}
+.paper-table{width:100%;font-size:9px;border-collapse:collapse;margin-bottom:14px}
+.paper-table th{background:#111;color:#fff;text-align:left;padding:6px 8px;font-family:var(--font-c);font-size:8px;text-transform:uppercase;letter-spacing:0.5px;font-weight:700}
+.paper-table td{padding:6px 8px;border-bottom:1px solid #eee;color:#111}
+.paper-totals{margin-left:auto;width:55%;background:#f8f8f8;padding:10px;border-radius:6px}
+.paper-total-row{display:flex;justify-content:space-between;font-size:10px;margin-bottom:4px;color:#666}
+.paper-total-row.brutto{color:#111;font-family:var(--font-c);font-weight:800;font-size:14px;letter-spacing:0.5px;border-top:2px solid #F5A623;padding-top:6px;margin-top:6px}
+.paper-total-row.brutto strong{color:#F5A623}
+
+/* ─── COMING SOON SECTIONS ─── */
+.coming-section{position:relative;z-index:1;padding:100px 32px;max-width:1280px;margin:0 auto}
+.coming-grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:60px;align-items:center}
+.coming-grid.reverse{grid-template-columns:0.9fr 1.1fr}
+.coming-grid.reverse .coming-text{order:2}
+.coming-grid.reverse .coming-mockup{order:1}
+
+.coming-text h3 {
+  font-family:var(--font-c);
+  font-size:clamp(36px, 6vw, 72px);
+  font-weight:900;
+  line-height:0.95;
+  text-transform:uppercase;
+  letter-spacing:-1px;
+  margin-bottom:20px;
+}
+.coming-text h3 em{font-style:normal;color:var(--accent)}
+.coming-text > p{color:var(--text2);font-size:17px;line-height:1.7;margin-bottom:24px;max-width:560px}
+.coming-features{list-style:none;display:flex;flex-direction:column;gap:12px;margin-top:24px}
+.coming-feature{display:flex;align-items:flex-start;gap:12px;color:var(--text2);font-size:15px;line-height:1.5}
+.coming-feature::before{
+  content:'';width:18px;height:18px;flex-shrink:0;
+  border:2px solid var(--accent);border-radius:50%;
+  margin-top:3px;
+  background:radial-gradient(circle,var(--accent) 30%,transparent 30%);
+}
+.coming-feature strong{color:var(--text);font-weight:600}
+
+/* Mockupy "Coming soon" */
+.coming-mockup{position:relative;display:flex;justify-content:center;align-items:center;min-height:400px}
+
+/* MOCKUP: ZLECENIA (lista zleceń + animowane oferty) */
+.mockup-zlecenia {
+  width:100%;max-width:380px;
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:24px;padding:24px;
+  box-shadow:0 30px 80px rgba(0,0,0,0.5);
+  position:relative;overflow:hidden;
+}
+.mockup-zlecenia::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--blue) 40%,transparent);opacity:0.5}
+.mockup-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.mockup-header-title{font-family:var(--font-c);font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:1px}
+.mockup-counter{font-family:var(--font-mono);font-size:11px;color:var(--blue);background:rgba(96,165,250,0.12);padding:3px 8px;border-radius:4px;border:1px solid rgba(96,165,250,0.3)}
+.zlecenie-card{
+  background:var(--glass);border:1px solid var(--border);
+  border-radius:14px;padding:14px;margin-bottom:10px;
+  position:relative;
+}
+.zlecenie-card.new {
+  border-color:rgba(96,165,250,0.4);
+  background:rgba(96,165,250,0.05);
+  animation:newCard 3s ease-in-out infinite;
+}
+@keyframes newCard{0%,100%{box-shadow:0 0 0 0 rgba(96,165,250,0.4)}50%{box-shadow:0 0 0 8px rgba(96,165,250,0)}}
+.zlecenie-title{font-family:var(--font-c);font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+.zlecenie-meta{font-size:10px;color:var(--text3);display:flex;gap:10px;margin-bottom:10px}
+.zlecenie-meta strong{color:var(--text2)}
+.zlecenie-offers{display:flex;align-items:center;gap:6px;font-size:11px}
+.offer-dots{display:flex;gap:-4px}
+.offer-dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--bg-card);background:linear-gradient(135deg,var(--accent),var(--accent2));margin-left:-4px;font-size:9px;font-weight:800;color:#000;display:flex;align-items:center;justify-content:center;font-family:var(--font-c)}
+.offer-dot:nth-child(1){margin-left:0;background:linear-gradient(135deg,#60A5FA,#3B82F6)}
+.offer-dot:nth-child(2){background:linear-gradient(135deg,#34D399,#10B981)}
+.offer-dot:nth-child(3){background:linear-gradient(135deg,var(--accent),var(--accent2))}
+.zlecenie-offers-text{color:var(--text3);font-size:11px}
+.zlecenie-offers-text strong{color:var(--blue)}
+.new-badge{
+  position:absolute;top:-6px;right:14px;
+  background:var(--blue);color:#000;
+  font-family:var(--font-c);font-size:8px;font-weight:800;
+  padding:2px 8px;border-radius:4px;letter-spacing:1px;
+  text-transform:uppercase;
+  animation:newPulse 2s ease-in-out infinite;
+}
+@keyframes newPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+
+/* MOCKUP: MARKETPLACE (siatka produktów) */
+.mockup-marketplace {
+  width:100%;max-width:380px;
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:24px;padding:24px;
+  box-shadow:0 30px 80px rgba(0,0,0,0.5);
+  position:relative;
+}
+.mockup-marketplace::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--purple) 40%,transparent);opacity:0.5}
+.mp-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.mp-product{background:var(--glass);border:1px solid var(--border);border-radius:12px;overflow:hidden;position:relative}
+.mp-product-img{
+  height:80px;
+  background:linear-gradient(135deg,#1a1a1a,#252525);
+  display:flex;align-items:center;justify-content:center;
+  font-size:32px;
+  position:relative;
+}
+.mp-product-img.tools{background:linear-gradient(135deg,rgba(245,166,35,0.15),rgba(245,166,35,0.05))}
+.mp-product-img.wood{background:linear-gradient(135deg,rgba(167,139,250,0.15),rgba(167,139,250,0.05))}
+.mp-product-img.pipe{background:linear-gradient(135deg,rgba(96,165,250,0.15),rgba(96,165,250,0.05))}
+.mp-product-img.paint{background:linear-gradient(135deg,rgba(244,114,182,0.15),rgba(244,114,182,0.05))}
+.mp-product-info{padding:10px}
+.mp-product-name{font-size:11px;font-weight:600;color:var(--text);margin-bottom:4px;line-height:1.3}
+.mp-product-price{font-family:var(--font-c);font-size:14px;font-weight:800;color:var(--accent);letter-spacing:0.5px}
+.mp-cart-badge{
+  position:absolute;top:6px;right:6px;
+  background:var(--accent);color:#000;
+  width:22px;height:22px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-c);font-size:11px;font-weight:800;
+  animation:cartBump 3s ease-in-out infinite;
+}
+@keyframes cartBump{0%,100%{transform:scale(1)}10%{transform:scale(1.3)}20%{transform:scale(1)}}
+
+/* MOCKUP: PORADNIK (chat z AI) */
+.mockup-poradnik {
+  width:100%;max-width:380px;
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:24px;padding:24px;
+  box-shadow:0 30px 80px rgba(0,0,0,0.5);
+  position:relative;
+}
+.mockup-poradnik::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--pink) 40%,transparent);opacity:0.5}
+.chat-msg{margin-bottom:12px;display:flex;gap:10px}
+.chat-msg.user{justify-content:flex-end}
+.chat-bubble{
+  max-width:80%;
+  padding:10px 14px;border-radius:14px;
+  font-size:12px;line-height:1.5;
+}
+.chat-msg.bot .chat-bubble{
+  background:var(--glass);border:1px solid var(--border);
+  border-bottom-left-radius:4px;
+  color:var(--text2);
+}
+.chat-msg.user .chat-bubble{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#000;border-bottom-right-radius:4px;font-weight:500;
+}
+.chat-avatar{width:28px;height:28px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;background:var(--glass);border:1px solid var(--border)}
+.chat-avatar.bot{background:linear-gradient(135deg,rgba(244,114,182,0.2),rgba(167,139,250,0.2));border-color:rgba(244,114,182,0.4)}
+.chat-typing{
+  display:flex;gap:4px;padding:14px;
+  background:var(--glass);border:1px solid var(--border);
+  border-radius:14px;border-bottom-left-radius:4px;
+  width:fit-content;
+}
+.chat-typing span{width:6px;height:6px;border-radius:50%;background:var(--text3);animation:typing 1.4s infinite ease-in-out both}
+.chat-typing span:nth-child(1){animation-delay:-0.32s}
+.chat-typing span:nth-child(2){animation-delay:-0.16s}
+@keyframes typing{0%,80%,100%{transform:scale(0.6);opacity:0.4}40%{transform:scale(1);opacity:1}}
+
+/* ─── DLA KOGO ─── */
+.who-section { padding:100px 32px; max-width:1280px; margin:0 auto; }
+.who-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:60px}
+.who-card{
+  background:linear-gradient(180deg,var(--glass-strong),rgba(255,255,255,0.02));
+  border:1px solid var(--border-strong);
+  border-radius:24px;
+  padding:40px 36px;
+  position:relative;
+  overflow:hidden;
+}
+.who-card.wytworca{border-color:var(--accent-border);background:linear-gradient(180deg,rgba(245,166,35,0.08),rgba(245,166,35,0.02))}
+.who-icon{
+  width:64px;height:64px;border-radius:18px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:32px;
+  margin-bottom:24px;
+  background:var(--glass-strong);border:1px solid var(--border-strong);
+}
+.who-card.wytworca .who-icon{background:var(--accent-dim);border-color:var(--accent-border)}
+.who-card-title{font-family:var(--font-c);font-size:32px;font-weight:900;text-transform:uppercase;letter-spacing:1px;line-height:1;margin-bottom:8px}
+.who-card-sub{color:var(--text3);font-size:14px;margin-bottom:24px;font-family:var(--font-c);font-weight:600;letter-spacing:1.5px;text-transform:uppercase}
+.who-list{list-style:none;display:flex;flex-direction:column;gap:12px}
+.who-list li{display:flex;align-items:flex-start;gap:12px;color:var(--text2);font-size:15px;line-height:1.5}
+.who-list li::before{
+  content:'✓';
+  color:var(--accent);
+  font-weight:800;
+  font-size:16px;
+  flex-shrink:0;
+  margin-top:1px;
+}
+
+/* ─── FINAL CTA ─── */
+.final-cta {
+  position:relative;
+  z-index:1;
+  padding:140px 32px;
+  text-align:center;
+  max-width:900px;
+  margin:0 auto;
+}
+.final-cta h2 {
+  font-family:var(--font-c);
+  font-size:clamp(48px, 9vw, 110px);
+  font-weight:900;
+  line-height:0.92;
+  text-transform:uppercase;
+  letter-spacing:-2px;
+  margin-bottom:24px;
+}
+.final-cta h2 em{font-style:normal;color:var(--accent)}
+.final-cta p{color:var(--text2);font-size:19px;line-height:1.6;margin-bottom:48px;max-width:680px;margin-left:auto;margin-right:auto}
+
+/* ─── FOOTER ─── */
+footer{
+  position:relative;
+  z-index:1;
+  padding:48px 32px;
+  border-top:1px solid var(--border);
+  text-align:center;
+  font-family:var(--font-c);
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  color:var(--text3);
+}
+footer a{color:var(--accent);text-decoration:none}
+footer a:hover{text-decoration:underline}
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(40px);transition:opacity 0.8s ease, transform 0.8s ease}
+.reveal.in{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:0.1s}
+.reveal-delay-2{transition-delay:0.2s}
+.reveal-delay-3{transition-delay:0.3s}
+
+/* ─── MOBILE ─── */
+@media (max-width:900px){
+  nav{padding:14px 20px}
+  section,.coming-section,.who-section{padding:80px 24px}
+  .hero{padding:120px 24px 40px;grid-template-columns:1fr;gap:40px}
+  .hero-mockup{order:2}
+  .phone{width:280px;height:560px}
+  .features-grid{grid-template-columns:1fr}
+  .feature-card{padding:28px 24px}
+  .faktura-demo{grid-template-columns:1fr;gap:40px}
+  .paper-mockup{transform:none}
+  .paper-mockup:hover{transform:none}
+  .coming-grid{grid-template-columns:1fr;gap:40px}
+  .coming-grid.reverse{grid-template-columns:1fr}
+  .coming-grid.reverse .coming-text{order:1}
+  .coming-grid.reverse .coming-mockup{order:2}
+  .who-grid{grid-template-columns:1fr;gap:20px}
+  .who-card{padding:32px 24px}
+  .hero-meta{flex-wrap:wrap;gap:20px}
+  .nav-cta{padding:8px 14px;font-size:11px}
+}
+@media (max-width:480px){
+  .hero h1{letter-spacing:-1px}
+  .btn-primary,.btn-secondary{padding:14px 24px;font-size:13px}
+  .features-grid{margin-top:32px}
+  .demo-steps{margin-top:24px}
+  .paper-inner{padding:20px 16px}
+  .paper-table{font-size:8px}
+}
+</style>
+</head>
+<body>
+
+<!-- Atmospheric glows -->
+<div class="atmosphere">
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+  <div class="glow glow-3"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">ROBI<span>ON</span></a>
+  <a href="https://app.robion.pl/" class="nav-cta">
+    Otwórz aplikację
+    <span class="nav-cta-arrow">→</span>
+  </a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>
+      Faktury.<br>
+      Zlecenia.<br>
+      Handel.<br>
+      <span class="accent">Po polsku, po prostu.</span>
+    </h1>
+    <p class="hero-lead">
+      <strong>Robion</strong> to aplikacja dla fachowców i zlecających. Faktury już działają — od podstaw, na własnym urządzeniu, bez subskrypcji. Kolejne moduły dochodzą sukcesywnie.
+    </p>
+    <div class="hero-buttons">
+      <a href="https://app.robion.pl/" class="btn-primary">
+        Otwórz aplikację
+        <span class="arrow">→</span>
+      </a>
+      <a href="#faktury" class="btn-secondary">Zobacz funkcje</a>
+    </div>
+    <div class="hero-meta">
+      <div class="meta-item">
+        <span class="meta-value">6</span>
+        <span class="meta-label">Typów dokumentów</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-value">PWA</span>
+        <span class="meta-label">Działa offline</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-value">100%</span>
+        <span class="meta-label">Dane lokalnie</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO MOCKUP — telefon z apką -->
+  <div class="hero-mockup">
+    <div class="phone-glow"></div>
+    <div class="phone">
+      <div class="phone-screen">
+        <div class="app-header">
+          <div class="app-logo">ROBI<span>ON</span></div>
+          <div class="app-page-title">Pulpit</div>
+        </div>
+        <div class="app-content">
+          <div class="app-stats">
+            <div class="stats-label">Sprzedaż w tym miesiącu</div>
+            <div class="stats-value-wrap">
+              <span class="counter">12&nbsp;450</span>
+              <span class="stats-currency">zł</span>
+            </div>
+            <div class="stats-meta">
+              <strong>8 faktur</strong>
+              <span style="color:var(--text3)">·</span>
+              <span class="stats-trend">↑ 23%</span>
+            </div>
+          </div>
+
+          <div class="app-actions">
+            <div class="app-action primary">
+              <span class="app-action-icon">🧾</span>
+              <span class="app-action-title">Nowa faktura</span>
+              <span class="app-action-sub">FV / PF / RK / KS</span>
+            </div>
+            <div class="app-action">
+              <span class="app-action-icon">👤</span>
+              <span class="app-action-title">Nowy klient</span>
+              <span class="app-action-sub">Z bazy NIP</span>
+            </div>
+            <div class="app-action">
+              <span class="app-action-icon">📦</span>
+              <span class="app-action-title">Nowy produkt</span>
+              <span class="app-action-sub">Do cennika</span>
+            </div>
+            <div class="app-action">
+              <span class="app-action-icon">📋</span>
+              <span class="app-action-title">Wszystkie</span>
+              <span class="app-action-sub">Historia</span>
+            </div>
+          </div>
+
+          <div class="fv-section-title">Ostatnie faktury</div>
+          <div class="fv-row">
+            <div class="fv-dot"></div>
+            <div class="fv-info">
+              <div class="fv-nr"><span class="fv-badge" style="background:#F5A623">FV</span>FV/15/04/2026</div>
+              <div class="fv-klient">Auto-Serwis Nowak Sp. z o.o.</div>
+            </div>
+            <div class="fv-kwota"><div class="fv-brutto">1 845 zł</div></div>
+          </div>
+          <div class="fv-row">
+            <div class="fv-dot" style="background:#888;box-shadow:none"></div>
+            <div class="fv-info">
+              <div class="fv-nr"><span class="fv-badge" style="background:#888">PF</span>PF/14/04/2026</div>
+              <div class="fv-klient">Zakład Stolarski Kowalski</div>
+            </div>
+            <div class="fv-kwota"><div class="fv-brutto">3 200 zł</div></div>
+          </div>
+          <div class="fv-row">
+            <div class="fv-dot"></div>
+            <div class="fv-info">
+              <div class="fv-nr"><span class="fv-badge" style="background:#7BA7E0">RK</span>RK/3/04/2026</div>
+              <div class="fv-klient">Jan Wiśniewski</div>
+            </div>
+            <div class="fv-kwota"><div class="fv-brutto">450 zł</div></div>
+          </div>
+        </div>
+        <div class="app-nav">
+          <div class="app-nav-item active"><div class="app-nav-icon">🏠</div><div class="app-nav-label">Pulpit</div></div>
+          <div class="app-nav-item"><div class="app-nav-icon">👥</div><div class="app-nav-label">Klienci</div></div>
+          <div class="app-nav-item"><div class="app-nav-icon">📦</div><div class="app-nav-label">Produkty</div></div>
+          <div class="app-nav-item"><div class="app-nav-icon">🧾</div><div class="app-nav-label">Faktury</div></div>
+          <div class="app-nav-item"><div class="app-nav-icon">⚙️</div><div class="app-nav-label">Więcej</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAKTURY — gotowy moduł -->
+<section id="faktury" class="features-section">
+  <div class="reveal">
+    <span class="section-tag">Działa teraz · beta · w aktywnym rozwoju</span>
+    <h2 class="section-title">Faktury<br>w <em>30 sekund</em>.</h2>
+    <p class="section-lead">
+      Pełnoprawny system fakturowania w mobilnej aplikacji. Wystawisz fakturę, podzielisz się PDF-em, wyślesz mailem — wszystko bez logowania, bez subskrypcji, na własnym urządzeniu.
+    </p>
+  </div>
+
+  <div class="features-grid">
+    <div class="feature-card reveal reveal-delay-1">
+      <div class="feature-icon">🧾</div>
+      <h3 class="feature-title">Wszystkie typy<br>dokumentów</h3>
+      <p class="feature-desc">
+        Faktura VAT, pro forma, rachunek, kosztorys, korekta i faktura zaliczkowa. Każdy typ z własną numeracją i wzorem. Pro formę zamienisz na fakturę jednym tapnięciem.
+      </p>
+    </div>
+
+    <div class="feature-card reveal reveal-delay-2">
+      <div class="feature-icon">🏛️</div>
+      <h3 class="feature-title">Integracja<br>z KSeF</h3>
+      <p class="feature-desc">
+        Aktualnie tryb demo — przygotowanie pod start obowiązku KSeF dla małych firm. Pełna wysyłka do Krajowego Systemu e-Faktur uruchamiana z momentem produkcyjnego startu.
+      </p>
+    </div>
+
+    <div class="feature-card reveal reveal-delay-3">
+      <div class="feature-icon">🔍</div>
+      <h3 class="feature-title">Pobieranie<br>danych z NIP</h3>
+      <p class="feature-desc">
+        Wpisz NIP — apka sama pobierze nazwę firmy, REGON, adres i status VAT z bazy Ministerstwa Finansów. Dziesięć cyfr i klient gotowy.
+      </p>
+    </div>
+
+    <div class="feature-card reveal reveal-delay-3">
+      <div class="feature-icon">📱</div>
+      <h3 class="feature-title">Działa<br>na każdym urządzeniu</h3>
+      <p class="feature-desc">
+        Progressive Web App — instalujesz jak normalną aplikację (iPhone, Android, Mac, PC). Działa offline. Dane lokalnie — nikt ich nie zobaczy.
+      </p>
+    </div>
+  </div>
+
+  <!-- DEMO: jak wystawić fakturę + paper mockup -->
+  <div class="faktura-demo">
+    <div class="demo-text reveal">
+      <h3>Wystawiasz fakturę<br><em>szybciej</em> niż mówisz<br>"VAT 23 procent".</h3>
+      <p>
+        Apka pamięta klientów, produkty, schemat numeracji i Twoje preferencje. Klient z bazy, pozycja z cennika, podgląd, wysyłka. Bez przeklikiwania, bez czekania.
+      </p>
+      <div class="demo-steps">
+        <div class="demo-step">
+          <div class="demo-step-num">1</div>
+          <div class="demo-step-text"><strong>Wybierasz klienta</strong> z kartoteki lub wpisujesz NIP — dane same się pobiorą</div>
+        </div>
+        <div class="demo-step">
+          <div class="demo-step-num">2</div>
+          <div class="demo-step-text"><strong>Dodajesz pozycje</strong> z cennika lub wpisujesz ręcznie. Cena netto albo brutto — Twoja decyzja</div>
+        </div>
+        <div class="demo-step">
+          <div class="demo-step-num">3</div>
+          <div class="demo-step-text"><strong>Sprawdzasz podgląd</strong> w klasycznym polskim wzorze, drukujesz, wysyłasz mailem albo zapisujesz PDF</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paper mockup faktury -->
+    <div class="reveal reveal-delay-2">
+      <div class="paper-mockup">
+        <div class="paper-inner">
+          <div class="paper-h1">Faktura VAT</div>
+          <div class="paper-nr">Nr <strong>FV/15/04/2026</strong></div>
+          <div class="paper-dates">
+            <div class="paper-date"><label>Data wystawienia</label><span>26.04.2026</span></div>
+            <div class="paper-date"><label>Data sprzedaży</label><span>26.04.2026</span></div>
+            <div class="paper-date"><label>Termin płatności</label><span>10.05.2026</span></div>
+          </div>
+          <div class="paper-strony">
+            <div class="paper-strona">
+              <label>Sprzedawca</label>
+              <div class="paper-strona-name">Twoja Firma Sp. z o.o.</div>
+              <div class="paper-strona-info">NIP: 1234567890<br>ul. Przykładowa 1<br>00-001 Warszawa</div>
+            </div>
+            <div class="paper-strona">
+              <label>Nabywca</label>
+              <div class="paper-strona-name">Auto-Serwis Nowak Sp. z o.o.</div>
+              <div class="paper-strona-info">NIP: 9876543210<br>ul. Motorowa 5<br>30-001 Kraków</div>
+            </div>
+          </div>
+          <table class="paper-table">
+            <thead>
+              <tr><th>Pozycja</th><th>Ilość</th><th>Netto</th><th>Brutto</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Wymiana opon 4 szt.</td><td>1 usł</td><td>200,00</td><td>246,00</td></tr>
+              <tr><td>Olej silnikowy 5W-40</td><td>5 l</td><td>425,00</td><td>522,75</td></tr>
+              <tr><td>Filtr powietrza</td><td>1 szt</td><td>45,00</td><td>55,35</td></tr>
+            </tbody>
+          </table>
+          <div class="paper-totals">
+            <div class="paper-total-row"><span>Razem netto:</span><span>670,00 zł</span></div>
+            <div class="paper-total-row"><span>VAT 23%:</span><span>154,10 zł</span></div>
+            <div class="paper-total-row brutto"><span>Do zapłaty:</span><strong>824,10 zł</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ZLECENIA — coming soon -->
+<section class="coming-section">
+  <div class="coming-grid">
+    <div class="coming-text reveal">
+      <span class="section-tag coming">W przygotowaniu — bez konkretnej daty</span>
+      <h3>Zlecenia.<br>Dla <em>obu stron</em>.</h3>
+      <p>
+        Zlecający publikuje co potrzebuje — fachowcy z okolicy widzą, składają oferty, wybierają. Bez prowizji w stylu Fixly. Bez ukrytych opłat. Z systemem ocen który ma sens.
+      </p>
+      <ul class="coming-features">
+        <li class="coming-feature"><strong>Geolokalizacja</strong> — fachowcy widzą tylko zlecenia z okolicy</li>
+        <li class="coming-feature"><strong>Bezpośredni kontakt</strong> — bez pośredników, bez prowizji od kontaktu</li>
+        <li class="coming-feature"><strong>System ocen po realizacji</strong> — opinie zweryfikowane, nie przypadkowe</li>
+        <li class="coming-feature"><strong>Połączenie z fakturami</strong> — ze zlecenia jednym tapnięciem zrobisz fakturę</li>
+      </ul>
+    </div>
+
+    <!-- Mockup: lista zleceń z animacją -->
+    <div class="coming-mockup reveal reveal-delay-2">
+      <div class="mockup-zlecenia">
+        <div class="mockup-header">
+          <div class="mockup-header-title">Zlecenia w okolicy</div>
+          <div class="mockup-counter">12 nowych</div>
+        </div>
+
+        <div class="zlecenie-card new">
+          <div class="new-badge">Nowe</div>
+          <div class="zlecenie-title">Wymiana zlewu w kuchni</div>
+          <div class="zlecenie-meta">
+            <span><strong>Warszawa</strong> · 2 km</span>
+            <span>Pilne</span>
+          </div>
+          <div class="zlecenie-offers">
+            <div class="offer-dots">
+              <div class="offer-dot">M</div>
+              <div class="offer-dot">P</div>
+              <div class="offer-dot">+5</div>
+            </div>
+            <span class="zlecenie-offers-text"><strong>7 ofert</strong> · od 250 zł</span>
+          </div>
+        </div>
+
+        <div class="zlecenie-card">
+          <div class="zlecenie-title">Malowanie pokoju 18 m²</div>
+          <div class="zlecenie-meta">
+            <span><strong>Pruszków</strong> · 8 km</span>
+            <span>Tydzień</span>
+          </div>
+          <div class="zlecenie-offers">
+            <div class="offer-dots">
+              <div class="offer-dot">A</div>
+              <div class="offer-dot">+2</div>
+            </div>
+            <span class="zlecenie-offers-text">3 oferty · od 800 zł</span>
+          </div>
+        </div>
+
+        <div class="zlecenie-card">
+          <div class="zlecenie-title">Naprawa kotła gazowego</div>
+          <div class="zlecenie-meta">
+            <span><strong>Warszawa</strong> · 5 km</span>
+            <span>Dziś</span>
+          </div>
+          <div class="zlecenie-offers">
+            <div class="offer-dots">
+              <div class="offer-dot">K</div>
+            </div>
+            <span class="zlecenie-offers-text">1 oferta · 350 zł</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARKETPLACE — coming soon -->
+<section class="coming-section">
+  <div class="coming-grid reverse">
+    <div class="coming-text reveal">
+      <span class="section-tag coming">W przygotowaniu — bez konkretnej daty</span>
+      <h3>Marketplace<br>dla <em>rzemieślników</em>.</h3>
+      <p>
+        Materiały, narzędzia, części zamienne. Sprzedawcy: składy budowlane, hurtownie, lokalni dystrybutorzy. Kupujący: wszyscy. Faktura idzie automatycznie do Twoich Faktur w Robion.
+      </p>
+      <ul class="coming-features">
+        <li class="coming-feature"><strong>Ceny dla profesjonalistów</strong> — niższe niż w Castoramie, gdy potwierdzisz NIP</li>
+        <li class="coming-feature"><strong>Dostawa do warsztatu</strong> — sprzedawca wie gdzie, ty wiesz kiedy</li>
+        <li class="coming-feature"><strong>Faktura w Robion od razu</strong> — koszt rejestrowany w jednym miejscu</li>
+        <li class="coming-feature"><strong>Lokalni dostawcy</strong> — odbiór dziś, bez czekania na kuriera z Niemiec</li>
+      </ul>
+    </div>
+
+    <!-- Mockup: marketplace -->
+    <div class="coming-mockup reveal reveal-delay-2">
+      <div class="mockup-marketplace">
+        <div class="mockup-header">
+          <div class="mockup-header-title">Marketplace</div>
+          <div class="mockup-counter" style="background:rgba(167,139,250,0.12);color:var(--purple);border-color:rgba(167,139,250,0.3)">Koszyk: 3</div>
+        </div>
+        <div class="mp-grid">
+          <div class="mp-product">
+            <div class="mp-product-img tools">🔧</div>
+            <div class="mp-product-info">
+              <div class="mp-product-name">Klucz nasadowy 17mm</div>
+              <div class="mp-product-price">42 zł</div>
+            </div>
+          </div>
+          <div class="mp-product">
+            <div class="mp-cart-badge">+</div>
+            <div class="mp-product-img wood">🪵</div>
+            <div class="mp-product-info">
+              <div class="mp-product-name">Deska sosnowa 200×20cm</div>
+              <div class="mp-product-price">89 zł</div>
+            </div>
+          </div>
+          <div class="mp-product">
+            <div class="mp-product-img pipe">🚿</div>
+            <div class="mp-product-info">
+              <div class="mp-product-name">Bateria umywalkowa</div>
+              <div class="mp-product-price">320 zł</div>
+            </div>
+          </div>
+          <div class="mp-product">
+            <div class="mp-product-img paint">🎨</div>
+            <div class="mp-product-info">
+              <div class="mp-product-name">Farba akrylowa biała 5l</div>
+              <div class="mp-product-price">145 zł</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORADNIK — coming soon -->
+<section class="coming-section">
+  <div class="coming-grid">
+    <div class="coming-text reveal">
+      <span class="section-tag coming">W przygotowaniu — bez konkretnej daty</span>
+      <h3>Wiedza o domu.<br><em>AI-asystent</em>.</h3>
+      <p>
+        Co zrobić gdy kapie kran. Jak sprawdzić czy kocioł nie jest do wymiany. Czym się różni gres od terakoty. Krótko, konkretnie, po polsku — bez forów internetowych z 2008 roku.
+      </p>
+      <ul class="coming-features">
+        <li class="coming-feature"><strong>Pytania w naturalnym języku</strong> — nie szukasz po hasłach, opisujesz problem</li>
+        <li class="coming-feature"><strong>Polskie realia</strong> — przepisy budowlane, nazwy materiałów, normy</li>
+        <li class="coming-feature"><strong>Skierowanie do fachowca</strong> — gdy problem przekracza poradnik</li>
+        <li class="coming-feature"><strong>Bez reklam, bez clickbaitów</strong> — odpowiedź pod pytaniem, koniec</li>
+      </ul>
+    </div>
+
+    <!-- Mockup: chat -->
+    <div class="coming-mockup reveal reveal-delay-2">
+      <div class="mockup-poradnik">
+        <div class="mockup-header">
+          <div class="mockup-header-title">Asystent Robion</div>
+          <div class="mockup-counter" style="background:rgba(244,114,182,0.12);color:var(--pink);border-color:rgba(244,114,182,0.3)">AI</div>
+        </div>
+
+        <div class="chat-msg user">
+          <div class="chat-bubble">Z kranu kapie nawet jak zakręcony do końca</div>
+          <div class="chat-avatar">👤</div>
+        </div>
+
+        <div class="chat-msg bot">
+          <div class="chat-avatar bot">🤖</div>
+          <div class="chat-bubble">
+            Najczęstsza przyczyna to zużyta uszczelka albo głowica ceramiczna. Sprawdź czy:
+            <br><br>
+            • woda kapie z dziubka czy spod pokrętła<br>
+            • regulujesz baterię jednouchwytową czy dwuręczną<br><br>
+            Odpowiedz, dam Ci konkretną instrukcję.
+          </div>
+        </div>
+
+        <div class="chat-msg user">
+          <div class="chat-bubble">Z dziubka, jednouchwytowa</div>
+          <div class="chat-avatar">👤</div>
+        </div>
+
+        <div class="chat-msg bot">
+          <div class="chat-avatar bot">🤖</div>
+          <div class="chat-typing">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DLA KOGO -->
+<section class="who-section">
+  <div class="reveal" style="text-align:center">
+    <span class="section-tag">Dla kogo Robion</span>
+    <h2 class="section-title" style="text-align:center">Dwa rodzaje użytkowników.<br><em>Jedna apka</em>.</h2>
+  </div>
+
+  <div class="who-grid">
+    <div class="who-card wytworca reveal reveal-delay-1">
+      <div class="who-icon">🔧</div>
+      <h3 class="who-card-title">Wytwórca</h3>
+      <div class="who-card-sub">Fachowiec · Rzemieślnik · Mała firma</div>
+      <ul class="who-list">
+        <li>Wystawiasz faktury — w 30 sekund każdą, tyle ile potrzebujesz</li>
+        <li><span style="color:var(--text3);font-size:13px">(wkrótce)</span> Odbierasz zlecenia z okolicy bez prowizji od kontaktu</li>
+        <li><span style="color:var(--text3);font-size:13px">(wkrótce)</span> Sprzedajesz na marketplace materiały i narzędzia</li>
+        <li>Zarabiasz na tym co robisz, nie na walce z aplikacjami</li>
+        <li><span style="color:var(--text3);font-size:13px">(wkrótce)</span> Gromadzisz oceny od klientów</li>
+      </ul>
+    </div>
+
+    <div class="who-card reveal reveal-delay-2">
+      <div class="who-icon">📋</div>
+      <h3 class="who-card-title">Zlecający</h3>
+      <div class="who-card-sub">Klient · Właściciel mieszkania · Zlecający usługi</div>
+      <ul class="who-list">
+        <li><span style="color:var(--text3);font-size:13px">(wkrótce)</span> Publikujesz zlecenia — fachowcy sami się zgłaszają</li>
+        <li><span style="color:var(--text3);font-size:13px">(wkrótce)</span> Porównujesz oferty cenowe i opinie</li>
+        <li><span style="color:var(--text3);font-size:13px">(wkrótce)</span> Kupujesz materiały po cenach hurtowych z dostawą</li>
+        <li><span style="color:var(--text3);font-size:13px">(wkrótce)</span> Pytasz AI-asystenta zanim zadzwonisz po fachowca</li>
+        <li><span style="color:var(--text3);font-size:13px">(wkrótce)</span> Oceniasz wykonane prace — dla siebie i dla innych</li>
+      </ul>
+      <p style="margin-top:20px;padding:14px;background:var(--glass);border:1px solid var(--border);border-radius:10px;font-size:13px;color:var(--text3);line-height:1.5">
+        Dla zlecających apka uruchamiana jest sukcesywnie wraz z kolejnymi modułami. Aktualnie Robion to przede wszystkim narzędzie dla wystawiających faktury.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="reveal">
+    <h2>Zacznij od <em>faktur</em>.<br>Reszta dochodzi.</h2>
+    <p>
+      Aplikacja faktur działa już teraz — w trybie beta, w aktywnym rozwoju. Otwórz, wystaw fakturę, zobacz czy Ci pasuje. Reszta modułów dochodzi sukcesywnie, bez sztywnych terminów. Robion to projekt indywidualny, budowany w wolnym czasie z prawdziwą uwagą do detalu.
+    </p>
+    <a href="https://app.robion.pl/" class="btn-primary">
+      Otwórz aplikację
+      <span class="arrow">→</span>
+    </a>
+  </div>
+</section>
+
+<footer>
+  © 2026 Robion · <a href="mailto:kontakt@robion.pl">kontakt@robion.pl</a> · <a href="https://app.robion.pl/">Aplikacja</a>
+</footer>
+
+<script>
+// Reveal on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Subtle nav background change on scroll
+const navEl = document.querySelector('nav');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 40) {
+    navEl.style.background = 'rgba(10,10,10,0.92)';
+  } else {
+    navEl.style.background = 'rgba(10,10,10,0.7)';
+  }
+}, { passive: true });
+</script>
+
+</body>
+</html>
