@@ -661,6 +661,40 @@ h2.section-title em {
   margin-top:1px;
 }
 
+/* ─── FAQ ─── */
+.faq-section{padding:100px 32px;max-width:900px;margin:0 auto}
+.faq-head{text-align:center;margin-bottom:56px}
+.faq-list{display:flex;flex-direction:column;gap:14px}
+.faq-item{
+  background:linear-gradient(180deg,var(--glass),rgba(255,255,255,0.02));
+  border:1px solid var(--border);
+  border-radius:16px;
+  overflow:hidden;
+  transition:border-color 0.25s ease;
+}
+.faq-item[open]{border-color:var(--accent-border)}
+.faq-item summary{
+  list-style:none;cursor:pointer;
+  padding:24px 28px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  font-family:var(--font-c);
+  font-size:clamp(17px,2vw,21px);font-weight:700;
+  letter-spacing:0.3px;color:var(--text);
+}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary::after{
+  content:'+';
+  flex-shrink:0;
+  font-family:var(--font-c);font-weight:700;
+  font-size:26px;line-height:1;color:var(--accent);
+  transition:transform 0.25s ease;
+}
+.faq-item[open] summary::after{transform:rotate(45deg)}
+.faq-answer{padding:0 28px 24px;color:var(--text2);font-size:16px;line-height:1.65}
+.faq-answer strong{color:var(--text);font-weight:600}
+.faq-answer a{color:var(--accent);text-decoration:none}
+.faq-answer a:hover{text-decoration:underline}
+
 /* ─── FINAL CTA ─── */
 .final-cta {
   position:relative;
@@ -710,7 +744,9 @@ footer a:hover{text-decoration:underline}
 /* ─── MOBILE ─── */
 @media (max-width:900px){
   nav{padding:14px 20px}
-  section,.coming-section,.who-section{padding:80px 24px}
+  section,.coming-section,.who-section,.faq-section{padding:80px 24px}
+  .faq-item summary{padding:20px 22px}
+  .faq-answer{padding:0 22px 20px}
   .hero{padding:120px 24px 40px;grid-template-columns:1fr;gap:40px}
   .hero-mockup{order:2}
   .phone{width:280px;height:560px}
@@ -775,6 +811,59 @@ footer a:hover{text-decoration:underline}
       "logo": "https://robion.pl/logo-robion.png",
       "email": "kontakt@robion.pl",
       "description": "Ekosystem polskich aplikacji dla rzemieślników i ich klientów — faktury KSeF i zlecenia."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Czy Robion jest darmowy?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Tak. Wystawianie faktur, wysyłka do KSeF, pobieranie danych z NIP i eksport dla księgowości są darmowe, bez subskrypcji i bez ukrytych opłat. Nie zakładasz konta i nie podajesz karty — po prostu otwierasz aplikację i pracujesz."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Od kiedy muszę wystawiać faktury w KSeF?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Obowiązkowy KSeF wchodzi etapami: 1 lutego 2026 dla dużych firm (obrót powyżej 200 mln zł), 1 kwietnia 2026 dla małych i średnich firm oraz jednoosobowych działalności, a 1 stycznia 2027 dla najmniejszych firm (sprzedaż do 10 tys. zł miesięcznie). Odbieranie faktur przez KSeF jest obowiązkowe dla wszystkich już od 1 lutego 2026."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Czy Robion wysyła faktury do Krajowego Systemu e-Faktur?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Tak. Robion generuje fakturę w formacie XML FA(3) i wysyła ją bezpośrednio do KSeF — z numerem KSeF i potwierdzeniem (UPO). Dostępny jest też tryb demo do przetestowania całego procesu."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Gdzie trzymane są moje dane? Czy są bezpieczne?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Robion działa w modelu local-first — wszystkie dane (faktury, klienci, cennik) zapisywane są lokalnie w przeglądarce na Twoim urządzeniu. Nie ma centralnego serwera ani bazy z Twoimi fakturami, nie zakładasz konta. Możesz w każdej chwili zrobić kopię zapasową do pliku."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Jakie dokumenty wystawię w Robionie?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Fakturę VAT, fakturę korygującą, zaliczkową i końcową rozliczeniową, a także pro formę, rachunek i kosztorys. Każdy typ ma własną numerację i klasyczny polski wzór. Pro formę zamienisz w fakturę jednym tapnięciem."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Na jakich urządzeniach działa Robion?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Na wszystkim. Robion to aplikacja PWA — instalujesz ją jak zwykłą apkę na iPhonie, Androidzie, Macu i komputerze z Windows, i działa też offline. Nie pobierasz nic ze sklepu — wchodzisz na app.robion.pl i gotowe."
+          }
+        }
+      ]
     }
   ]
 }
@@ -1260,6 +1349,58 @@ footer a:hover{text-decoration:underline}
         Dla zlecających apka uruchamiana jest sukcesywnie wraz z kolejnymi modułami. Aktualnie Robion to przede wszystkim narzędzie dla wystawiających faktury.
       </p>
     </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section" id="faq">
+  <div class="faq-head reveal">
+    <span class="section-tag">Najczęstsze pytania</span>
+    <h2 class="section-title">Pytania o <em>faktury KSeF</em>.</h2>
+  </div>
+
+  <div class="faq-list reveal reveal-delay-1">
+    <details class="faq-item">
+      <summary>Czy Robion jest darmowy?</summary>
+      <div class="faq-answer">
+        Tak. Wystawianie faktur, wysyłka do KSeF, pobieranie danych z NIP i eksport dla księgowości są <strong>darmowe, bez subskrypcji i bez ukrytych opłat</strong>. Nie zakładasz konta i nie podajesz karty — po prostu otwierasz aplikację i pracujesz.
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Od kiedy muszę wystawiać faktury w KSeF?</summary>
+      <div class="faq-answer">
+        Obowiązkowy KSeF wchodzi etapami: <strong>1 lutego 2026</strong> dla dużych firm (obrót powyżej 200 mln zł), <strong>1 kwietnia 2026</strong> dla małych i średnich firm oraz jednoosobowych działalności, a <strong>1 stycznia 2027</strong> dla najmniejszych firm (sprzedaż do 10 tys. zł miesięcznie). Odbieranie faktur przez KSeF jest obowiązkowe dla wszystkich już od 1 lutego 2026. Terminy ustala Ministerstwo Finansów — warto potwierdzić aktualny stan u swojej księgowości.
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Czy Robion wysyła faktury do Krajowego Systemu e-Faktur?</summary>
+      <div class="faq-answer">
+        Tak. Robion generuje fakturę w formacie <strong>XML FA(3)</strong> i wysyła ją bezpośrednio do KSeF — z numerem KSeF i potwierdzeniem (UPO). Dostępny jest też tryb demo do bezpiecznego przetestowania całego procesu, zanim wyślesz prawdziwą fakturę.
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Gdzie trzymane są moje dane? Czy są bezpieczne?</summary>
+      <div class="faq-answer">
+        Robion działa w modelu <strong>local-first</strong> — wszystkie Twoje dane (faktury, klienci, cennik) zapisywane są lokalnie w przeglądarce na Twoim urządzeniu. Nie ma centralnego serwera ani bazy z Twoimi fakturami, nie zakładasz konta. Możesz w każdej chwili zrobić kopię zapasową do pliku.
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Jakie dokumenty wystawię w Robionie?</summary>
+      <div class="faq-answer">
+        Fakturę VAT, fakturę korygującą, zaliczkową i końcową rozliczeniową, a także pro formę, rachunek i kosztorys. Każdy typ ma własną numerację i klasyczny polski wzór. <strong>Pro formę zamienisz w fakturę jednym tapnięciem.</strong>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Na jakich urządzeniach działa?</summary>
+      <div class="faq-answer">
+        Na wszystkim. Robion to <strong>aplikacja PWA</strong> — instalujesz ją jak zwykłą apkę na iPhonie, Androidzie, Macu i komputerze z Windows, i działa też offline. Nie pobierasz nic ze sklepu — wchodzisz na <a href="https://app.robion.pl/">app.robion.pl</a> i gotowe.
+      </div>
+    </details>
   </div>
 </section>
 
