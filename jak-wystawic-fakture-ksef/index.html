@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jak wystawić fakturę przez KSeF krok po kroku — poradnik dla JDG | Robion</title>
+  <meta name="description" content="Praktyczny poradnik: jak wystawić fakturę w KSeF, jakie dane są potrzebne, co zrobić gdy coś nie gra. Sprawdź jak Robion robi to za Ciebie automatycznie.">
+  <link rel="canonical" href="https://robion.pl/jak-wystawic-fakture-ksef/">
+  <meta property="og:title" content="Jak wystawić fakturę przez KSeF krok po kroku — poradnik dla JDG">
+  <meta property="og:description" content="Praktyczny poradnik: jak wystawić fakturę w KSeF, jakie dane są potrzebne i jak sprawdzić czy trafiła do systemu.">
+  <meta property="og:url" content="https://robion.pl/jak-wystawic-fakture-ksef/">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://robion.pl/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --accent: #F5A623;
+      --bg: #0d0d0f;
+      --surface: #17171a;
+      --border: rgba(255,255,255,0.08);
+      --text: #f0f0f0;
+      --text2: #aaa;
+      --green: #34D399;
+      --radius: 14px;
+      --font-c: 'Barlow Condensed', sans-serif;
+      --font: 'Barlow', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); line-height: 1.7; }
+
+    header {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    header a { text-decoration: none; display: flex; align-items: center; gap: 10px; }
+    header img { height: 32px; }
+    header span {
+      font-family: var(--font-c);
+      font-size: 13px;
+      color: var(--text2);
+      border-left: 1px solid var(--border);
+      padding-left: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .hero {
+      max-width: 760px;
+      margin: 64px auto 0;
+      padding: 0 24px;
+    }
+    .tag {
+      display: inline-block;
+      background: rgba(245,166,35,0.12);
+      border: 1px solid rgba(245,166,35,0.3);
+      color: var(--accent);
+      font-family: var(--font-c);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-family: var(--font-c);
+      font-size: clamp(28px, 5vw, 46px);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+    h1 em { color: var(--accent); font-style: normal; }
+    .lead {
+      font-size: 18px;
+      color: var(--text2);
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+    .meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--text2);
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+    .meta span { display: flex; align-items: center; gap: 6px; }
+
+    article {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+    h2 {
+      font-family: var(--font-c);
+      font-size: 26px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 48px 0 16px;
+      color: #fff;
+    }
+    h3 {
+      font-family: var(--font-c);
+      font-size: 19px;
+      font-weight: 700;
+      margin: 28px 0 10px;
+      color: var(--accent);
+    }
+    p { margin-bottom: 16px; color: var(--text); }
+    ul, ol { margin: 0 0 16px 24px; }
+    li { margin-bottom: 10px; }
+    strong { color: #fff; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .callout {
+      background: rgba(245,166,35,0.07);
+      border: 1px solid rgba(245,166,35,0.2);
+      border-left: 3px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      margin: 24px 0;
+      font-size: 15px;
+    }
+    .callout-ok {
+      background: rgba(52,211,153,0.07);
+      border: 1px solid rgba(52,211,153,0.2);
+      border-left: 3px solid var(--green);
+    }
+    .callout-ok strong { color: var(--green); }
+
+    .steps {
+      counter-reset: step;
+      list-style: none;
+      margin: 0 0 24px;
+      padding: 0;
+    }
+    .steps li {
+      counter-increment: step;
+      display: flex;
+      gap: 16px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .steps li:last-child { border-bottom: none; }
+    .steps li::before {
+      content: counter(step);
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      background: rgba(245,166,35,0.15);
+      border: 1px solid rgba(245,166,35,0.4);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-c);
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--accent);
+    }
+    .steps li .step-content strong {
+      display: block;
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+    .steps li .step-content p {
+      margin: 0;
+      font-size: 15px;
+      color: var(--text2);
+    }
+
+    .faq-item {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .faq-item summary {
+      padding: 16px 20px;
+      cursor: pointer;
+      font-weight: 600;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after { content: '+'; color: var(--accent); font-size: 20px; }
+    .faq-item[open] summary::after { content: '−'; }
+    .faq-item .faq-body { padding: 0 20px 16px; color: var(--text2); line-height: 1.65; }
+
+    .cta-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 40px;
+      text-align: center;
+      margin: 48px 0;
+    }
+    .cta-box h2 {
+      font-size: 30px;
+      margin: 0 0 12px;
+      text-transform: uppercase;
+    }
+    .cta-box p { color: var(--text2); margin-bottom: 24px; }
+    .btn {
+      display: inline-block;
+      background: var(--accent);
+      color: #000;
+      font-family: var(--font-c);
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 14px 32px;
+      border-radius: 10px;
+      text-decoration: none;
+    }
+    .btn:hover { opacity: 0.9; text-decoration: none; }
+
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .compare-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+    .compare-card h3 { margin-top: 0; font-size: 15px; }
+    .compare-card ul { margin-left: 16px; }
+    .compare-card li { font-size: 14px; color: var(--text2); margin-bottom: 6px; }
+    @media (max-width: 580px) { .compare { grid-template-columns: 1fr; } }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 24px;
+      text-align: center;
+      color: var(--text2);
+      font-size: 13px;
+      margin-top: 40px;
+    }
+    footer a { color: var(--text2); }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Jak wystawić fakturę przez KSeF krok po kroku — poradnik dla JDG",
+    "description": "Praktyczny poradnik jak wystawić fakturę w KSeF — od autoryzacji po numer KSeF Reference. Dla właścicieli JDG i małych firm.",
+    "datePublished": "2026-06-14",
+    "dateModified": "2026-06-14",
+    "author": { "@type": "Organization", "name": "Robion", "url": "https://robion.pl" },
+    "publisher": { "@type": "Organization", "name": "Robion", "logo": { "@type": "ImageObject", "url": "https://robion.pl/icons/icon-512.png" } },
+    "url": "https://robion.pl/jak-wystawic-fakture-ksef/",
+    "mainEntityOfPage": "https://robion.pl/jak-wystawic-fakture-ksef/"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Czy muszę mieć specjalny program żeby wysłać fakturę do KSeF?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Nie musisz kupować drogiego programu. Możesz wystawić fakturę przez darmową aplikację Robion (app.robion.pl), która wysyła fakturę do KSeF automatycznie. Ministerstwo Finansów udostępnia też bezpłatną aplikację e-mikrofirma, ale jest mało wygodna." }
+      },
+      {
+        "@type": "Question",
+        "name": "Jak długo trwa zatwierdzenie faktury przez KSeF?",
+        "acceptedAnswer": { "@type": "Answer", "text": "KSeF potwierdza fakturę zwykle w ciągu kilku sekund. W przypadku awarii systemu faktura może czekać w kolejce do 24 godzin. Numer KSeF Reference pojawia się automatycznie po zatwierdzeniu." }
+      },
+      {
+        "@type": "Question",
+        "name": "Co to jest numer KSeF Reference?",
+        "acceptedAnswer": { "@type": "Answer", "text": "To unikalny identyfikator faktury w Krajowym Systemie e-Faktur — coś jak numer śledzenia przesyłki. Potwierdzenie że Twoja faktura faktycznie jest w systemie i kontrahent może ją zobaczyć. Format: ciąg cyfr i liter, np. 1234567890-20260601-ABCDEF." }
+      },
+      {
+        "@type": "Question",
+        "name": "Czy faktura w KSeF zastępuje papierową lub PDF?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Tak — faktura w KSeF jest oryginałem. Nie musisz już wysyłać PDF-em ani drukować. Wystarczy podać numer KSeF Reference kupującemu — on też widzi fakturę w swoim systemie." }
+      },
+      {
+        "@type": "Question",
+        "name": "Co jeśli KSeF nie działa w momencie wystawiania faktury?",
+        "acceptedAnswer": { "@type": "Answer", "text": "W trybie awaryjnym (offline) możesz wystawić fakturę poza KSeF, ale musisz ją przesłać do systemu w ciągu 1 dnia roboczego od usunięcia awarii. Ministerstwo Finansów ogłasza tryb awaryjny na stronie podatki.gov.pl." }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+
+<header>
+  <a href="https://robion.pl">
+    <img src="https://robion.pl/logo-robion.png" alt="Robion">
+    <span>Blog</span>
+  </a>
+</header>
+
+<div class="hero">
+  <div class="tag">Poradnik · KSeF</div>
+  <h1>Jak wystawić fakturę<br>przez <em>KSeF</em><br>krok po kroku</h1>
+  <p class="lead">Masz JDG i musisz wystawiać faktury przez KSeF, ale nie wiesz od czego zacząć? Ten artykuł przeprowadzi Cię przez cały proces — od zera do numeru KSeF Reference.</p>
+  <div class="meta">
+    <span>📅 14 czerwca 2026</span>
+    <span>⏱ ok. 5 minut czytania</span>
+    <span>✍️ Robion</span>
+  </div>
+</div>
+
+<article>
+
+  <p>Od <strong>1 lutego 2026</strong> KSeF jest obowiązkowy dla większości firm w Polsce. Jeśli wystawiasz faktury VAT lub faktury bez VAT (JDG zwolniony podmiotowo) — musisz to robić przez Krajowy System e-Faktur. Koniec z PDF-em wysyłanym mailem.</p>
+
+  <p>Dobra wiadomość: sam proces nie jest aż tak skomplikowany. Zły wygląd ministerialnych stron nie pomaga, ale poniżej opisuję dokładnie co zrobić.</p>
+
+  <div class="callout">
+    <strong>Wolisz nie klikać po MF-owych stronach?</strong> <a href="https://app.robion.pl">Robion</a> robi to za Ciebie — wystawiasz fakturę jak zwykle, a aplikacja sama wysyła ją do KSeF i pokazuje numer Reference.
+  </div>
+
+  <h2>Co potrzebujesz przed wystawieniem faktury</h2>
+
+  <p>Zanim wystawisz pierwszą fakturę przez KSeF, musisz się <strong>autoryzować w systemie</strong>. To jednorazowa czynność — potem fakturowanie działa normalnie.</p>
+
+  <h3>Opcja A — przez program do faktur (np. Robion)</h3>
+  <p>Najwygodniejsza droga. W Robionie wchodzisz w Ustawienia → KSeF i logujesz się przez profil zaufany lub podpis kwalifikowany. Aplikacja pobiera token autoryzacyjny i od tej chwili sama wysyła każdą fakturę do KSeF po kliknięciu "Wystaw".</p>
+
+  <h3>Opcja B — przez e-mikrofirmę Ministerstwa Finansów</h3>
+  <p>Darmowa aplikacja MF dostępna na podatki.gov.pl. Działa, ale jest mało wygodna — brak szablonów, brak bazy kontrahentów, każdą fakturę wypełniasz od nowa.</p>
+
+  <h2>Jak wygląda wystawienie faktury krok po kroku</h2>
+
+  <p>Poniżej proces w Robionie — logika jest identyczna w każdym programie, tylko interfejs inny.</p>
+
+  <ol class="steps">
+    <li>
+      <div class="step-content">
+        <strong>Podaj dane kontrahenta</strong>
+        <p>Wpisz NIP kupującego — program pobierze dane firmy automatycznie z GUS. Możesz też wybrać kontrahenta z bazy jeśli już wcześniej mu wystawiałeś.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-content">
+        <strong>Dodaj pozycje faktury</strong>
+        <p>Wpisz co sprzedajesz, ilość, stawkę VAT (lub "zw." jeśli jesteś zwolniony), cenę. Program wyliczy kwoty i podatek.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-content">
+        <strong>Sprawdź datę i numer faktury</strong>
+        <p>Numer jest automatyczny (np. FV/06/2026/1). Data sprzedaży i data wystawienia — upewnij się że się zgadzają z tym co było uzgodnione z klientem.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-content">
+        <strong>Kliknij "Wystaw i wyślij do KSeF"</strong>
+        <p>Program konwertuje fakturę do formatu FA(2) (XML wymagany przez MF) i wysyła ją do KSeF. Trwa to kilka sekund.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-content">
+        <strong>Odczekaj na numer KSeF Reference</strong>
+        <p>Po zatwierdzeniu przez KSeF (zwykle sekundy, max kilka minut) pojawia się unikalny numer KSeF Reference. To potwierdzenie że faktura jest w systemie. Możesz go podać klientowi lub po prostu zachować dla siebie.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-content">
+        <strong>Gotowe — nie musisz wysyłać PDF-a</strong>
+        <p>Faktura trafia automatycznie do KSeF kontrahenta. Nie musisz nic wysyłać mailem — chyba że chcesz (Robion pozwala wyeksportować PDF jeśli klient poprosi).</p>
+      </div>
+    </li>
+  </ol>
+
+  <div class="callout callout-ok">
+    <strong>Jak sprawdzić czy faktura dotarła do KSeF?</strong><br>
+    W Robionie każda faktura ma status — zielony znaczek przy numerze KSeF Reference oznacza że jest w systemie. Możesz też wejść na stronie podatki.gov.pl w "Mój KSeF" i przejrzeć wystawione dokumenty.
+  </div>
+
+  <h2>Weryfikacja faktur zakupowych — czy kontrahent naprawdę wysłał fakturę?</h2>
+
+  <p>KSeF daje Ci też coś, czego PDF nie daje: <strong>pewność że faktura od kontrahenta naprawdę trafiła do systemu</strong>. Ile razy dostałeś maila "wysłałem fakturę" — a w KSeF jej nie ma?</p>
+
+  <p>W Robionie możesz połączyć się ze swoim kontem KSeF jako odbiorca i zobaczyć wszystkie faktury zakupowe wystawione na Twój NIP. Żadnych niespodzianek — albo jest, albo jej nie ma.</p>
+
+  <div class="callout">
+    <strong>Uwaga:</strong> Weryfikacja faktur zakupowych wymaga osobnego tokenu KSeF "jako odbiorca". W Robionie ustawiasz to w Ustawienia → KSeF → Faktury zakupowe — to kilka kliknięć.
+  </div>
+
+  <h2>Typowe błędy przy pierwszej fakturze KSeF</h2>
+
+  <ul>
+    <li><strong>Błędny NIP kontrahenta</strong> — KSeF odrzuci fakturę jeśli NIP nie istnieje w bazie MF. Zawsze weryfikuj NIP przed wystawieniem (Robion robi to automatycznie).</li>
+    <li><strong>Zła stawka VAT</strong> — wpisanie stawki 23% tam gdzie powinno być "zw." skończy się korektą. Sprawdź co sprzedajesz i jaka stawka obowiązuje.</li>
+    <li><strong>Brak tokenu KSeF</strong> — jeśli autoryzacja wygasła lub token jest nieprawidłowy, faktura nie dotrze do KSeF. Robion pokaże komunikat błędu i poprosi o ponowne zalogowanie.</li>
+    <li><strong>Data wystawienia poza terminem</strong> — fakturę możesz wystawić max. 60 dni po dacie sprzedaży. Wstecz też możesz — do 60 dni przed.</li>
+  </ul>
+
+  <h2>Co jeśli KSeF nie działa?</h2>
+
+  <p>MF przewidziało tryb awaryjny. Jeśli KSeF jest niedostępny (awaria ogłoszona na stronie MF), możesz wystawić fakturę poza systemem. Masz wtedy <strong>1 dzień roboczy</strong> od przywrócenia systemu na wysłanie jej do KSeF z oznaczeniem "tryb awaryjny".</p>
+
+  <p>Robion automatycznie wykrywa czy KSeF jest dostępny i informuje Cię jeśli coś jest nie tak.</p>
+
+  <div class="compare">
+    <div class="compare-card">
+      <h3>Bez KSeF (stare podejście)</h3>
+      <ul>
+        <li>Wystawiasz fakturę w programie</li>
+        <li>Eksportujesz PDF</li>
+        <li>Wysyłasz mailem klientowi</li>
+        <li>Klient może "nie otrzymać"</li>
+        <li>Nikt nie weryfikuje czy dotarła</li>
+      </ul>
+    </div>
+    <div class="compare-card">
+      <h3 style="color: var(--green)">Z KSeF (obowiązek od 2026)</h3>
+      <ul>
+        <li>Wystawiasz fakturę w programie</li>
+        <li>Program wysyła do KSeF automatycznie</li>
+        <li>Klient widzi w swoim systemie</li>
+        <li>Numer Reference = potwierdzenie</li>
+        <li>Brak sporów co do dostarczenia</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="cta-box">
+    <h2>Robion wystawia faktury<br>w KSeF za Ciebie</h2>
+    <p>Wpisujesz dane, klikasz "Wystaw" — reszta działa automatycznie.<br>Darmowe. Bez subskrypcji. Dane zostają w Twojej przeglądarce.</p>
+    <a href="https://app.robion.pl" class="btn">Wystaw pierwszą fakturę →</a>
+  </div>
+
+  <h2>Najczęściej zadawane pytania</h2>
+
+  <details class="faq-item">
+    <summary>Czy muszę mieć specjalny program żeby wysłać fakturę do KSeF?</summary>
+    <div class="faq-body">
+      Nie musisz kupować drogiego programu. Możesz wystawić fakturę przez darmową aplikację <a href="https://app.robion.pl">Robion</a>, która wysyła fakturę do KSeF automatycznie. Ministerstwo Finansów udostępnia też bezpłatną aplikację e-mikrofirma, ale jest mało wygodna i brakuje jej podstawowych funkcji jak baza kontrahentów.
+    </div>
+  </details>
+
+  <details class="faq-item">
+    <summary>Jak długo trwa zatwierdzenie faktury przez KSeF?</summary>
+    <div class="faq-body">
+      KSeF potwierdza fakturę zwykle w ciągu kilku sekund. W przypadku zwiększonego ruchu lub planowanych prac serwisowych może to potrwać do kilku minut. Numer KSeF Reference pojawia się automatycznie po zatwierdzeniu — nie musisz nic robić.
+    </div>
+  </details>
+
+  <details class="faq-item">
+    <summary>Co to jest numer KSeF Reference?</summary>
+    <div class="faq-body">
+      To unikalny identyfikator faktury w Krajowym Systemie e-Faktur — coś jak numer śledzenia paczki. Potwierdza że Twoja faktura faktycznie jest w systemie i kontrahent może ją zobaczyć. Format to ciąg cyfr i liter nadany przez MF. Podajesz go klientowi zamiast załącznika PDF.
+    </div>
+  </details>
+
+  <details class="faq-item">
+    <summary>Czy faktura w KSeF zastępuje papierową lub PDF?</summary>
+    <div class="faq-body">
+      Tak — faktura wysłana przez KSeF jest dokumentem oryginalnym. Nie musisz już drukować ani wysyłać PDF-em. Wystarczy że kupujący ma Twój NIP — on też widzi fakturę automatycznie po zalogowaniu do swojego KSeF. PDF możesz wygenerować dodatkowo na prośbę klienta.
+    </div>
+  </details>
+
+  <details class="faq-item">
+    <summary>Co jeśli KSeF nie działa w momencie wystawiania faktury?</summary>
+    <div class="faq-body">
+      W trybie awaryjnym (ogłaszanym przez MF na podatki.gov.pl) możesz wystawić fakturę poza KSeF. Masz wtedy 1 dzień roboczy od usunięcia awarii na przesłanie jej do systemu. Robion automatycznie informuje czy KSeF jest dostępny.
+    </div>
+  </details>
+
+  <details class="faq-item">
+    <summary>Czy mogę wystawić fakturę z datą wsteczną?</summary>
+    <div class="faq-body">
+      Tak, ale z ograniczeniami. Data wystawienia faktury może być maksymalnie 60 dni po dacie sprzedaży i maksymalnie 60 dni przed datą wystawienia. Jeśli chcesz wystawić fakturę za usługę sprzed 3 miesięcy — to już jest problem i warto skonsultować się z księgowym.
+    </div>
+  </details>
+
+  <p style="margin-top: 48px; color: var(--text2); font-size: 14px;">
+    Więcej o obowiązkowym KSeF w 2026: <a href="https://robion.pl/ksef-obowiazkowy-2026/">KSeF obowiązkowy od 2026 — co musisz wiedzieć</a>
+  </p>
+
+</article>
+
+<footer>
+  <p>© 2026 Robion · <a href="https://robion.pl">robion.pl</a> · <a href="mailto:kontakt@robion.pl">kontakt@robion.pl</a></p>
+</footer>
+
+</body>
+</html>
