@@ -773,6 +773,16 @@ footer a:hover{text-decoration:underline}
   .paper-inner{padding:20px 16px}
   .paper-table{font-size:8px}
 }
+
+/* Wspólne wejścia do modułów ROBION */
+.robion-modules{position:relative;flex-shrink:0;margin-inline-start:auto;font-size:13px;letter-spacing:normal}
+.robion-modules summary{display:flex;align-items:center;gap:8px;min-height:44px;padding:8px 12px;list-style:none;cursor:pointer;border:1px solid var(--accent-border);border-radius:10px;background:var(--accent-dim);color:var(--accent);font-family:var(--font);font-weight:600}
+.robion-modules summary::-webkit-details-marker{display:none}
+.robion-modules summary:focus-visible,.robion-modules a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.robion-modules-panel{position:absolute;right:0;top:calc(100% + 8px);width:220px;max-width:calc(100vw - 40px);padding:6px;border:1px solid var(--border-strong,var(--border));border-radius:12px;background:#181818;box-shadow:0 12px 36px #0006}
+.robion-modules-panel a,.robion-modules-panel span[aria-current]{display:block;padding:12px 10px;border-radius:7px;color:var(--text);text-decoration:none;font-family:var(--font);font-size:14px;line-height:1.4}
+.robion-modules-panel a:hover,.robion-modules-panel [aria-current]{background:var(--accent-dim);color:var(--accent)}
+nav{gap:12px;flex-wrap:wrap}
 </style>
 
 <!-- Dane strukturalne — pomagają Google rozpoznać czym jest Robion -->
@@ -882,6 +892,12 @@ footer a:hover{text-decoration:underline}
 <!-- NAV -->
 <nav>
   <a href="#" class="nav-logo"><img src="logo-robion.png" alt="Robion" style="height:32px;width:auto;display:block"></a>
+  <details class="robion-modules"><summary>Moduły ROBION <span aria-hidden="true">▾</span></summary><div class="robion-modules-panel" role="navigation" aria-label="Moduły ROBION">
+<span aria-current="page">Strona główna</span>
+<a href="https://app.robion.pl/">Faktury</a>
+<a href="https://zlecenia.robion.pl/">Zlecenia</a>
+<a href="https://konstrukcje.robion.pl/">Konstrukcje 3D</a>
+</div></details>
 </nav>
 
 <!-- HERO -->
@@ -894,7 +910,7 @@ footer a:hover{text-decoration:underline}
       <span class="accent">Po polsku, po prostu.</span>
     </h1>
     <p class="hero-lead">
-      <strong>Robion</strong> to aplikacja dla fachowców i zlecających. Faktury i Zlecenia już działają — od podstaw, na własnym urządzeniu, bez subskrypcji. Kolejne moduły dochodzą sukcesywnie.
+      <strong>Robion</strong> to aplikacja dla fachowców i zlecających. Faktury, Zlecenia i Konstrukcje 3D już działają — od podstaw, na własnym urządzeniu, bez subskrypcji. Kolejne moduły dochodzą sukcesywnie.
     </p>
     <div class="hero-buttons">
       <a href="https://app.robion.pl/" class="btn-primary">
@@ -903,6 +919,10 @@ footer a:hover{text-decoration:underline}
       </a>
       <a href="https://zlecenia.robion.pl/" class="btn-primary">
         Otwórz Zlecenia
+        <span class="arrow">→</span>
+      </a>
+      <a href="https://konstrukcje.robion.pl/" class="btn-primary">
+        Konstrukcje 3D
         <span class="arrow">→</span>
       </a>
     </div>
@@ -1311,9 +1331,9 @@ footer a:hover{text-decoration:underline}
 <!-- FINAL CTA -->
 <section class="final-cta">
   <div class="reveal">
-    <h2>Faktury. Zlecenia.<br><em>Działają już teraz.</em></h2>
+    <h2>Faktury. Zlecenia. Konstrukcje 3D.<br><em>Działają już teraz.</em></h2>
     <p>
-      Obie aplikacje działają, są w aktywnym rozwoju. Otwórz, sprawdź, zobacz czy Ci pasują. Kolejne moduły dochodzą sukcesywnie, bez sztywnych terminów. Robion to projekt indywidualny, budowany w wolnym czasie z prawdziwą uwagą do detalu.
+      Aplikacje działają i są w aktywnym rozwoju. Otwórz, sprawdź, zobacz czy Ci pasują. Kolejne moduły dochodzą sukcesywnie, bez sztywnych terminów. Robion to projekt indywidualny, budowany w wolnym czasie z prawdziwą uwagą do detalu.
     </p>
     <div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:8px">
       <a href="https://app.robion.pl/" class="btn-primary">
@@ -1324,12 +1344,16 @@ footer a:hover{text-decoration:underline}
         Otwórz Zlecenia
         <span class="arrow">→</span>
       </a>
+      <a href="https://konstrukcje.robion.pl/" class="btn-primary">
+        Konstrukcje 3D
+        <span class="arrow">→</span>
+      </a>
     </div>
   </div>
 </section>
 
 <footer>
-  © 2026 Robion · <a href="mailto:kontakt@robion.pl">kontakt@robion.pl</a> · <a href="https://app.robion.pl/">Faktury</a> · <a href="https://zlecenia.robion.pl/">Zlecenia</a>
+  © 2026 Robion · <a href="mailto:kontakt@robion.pl">kontakt@robion.pl</a> · <a href="https://app.robion.pl/">Faktury</a> · <a href="https://zlecenia.robion.pl/">Zlecenia</a> · <a href="https://konstrukcje.robion.pl/">Konstrukcje 3D</a>
 </footer>
 
 <script>
